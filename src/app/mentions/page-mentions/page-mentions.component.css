@@ -1,0 +1,30 @@
+.titre_centrer{
+    font-size: 20px;
+    text-align: center;
+}
+.centrer{
+    text-align: center;
+}
+.centrer_gras{
+    text-align: center;
+    font-weight: bold;
+}
+.centrer_souligne
+{
+    text-decoration: underline;
+    text-align: center;
+}
+.gras{
+    font-weight: bold; 
+}
+.rouge_gras{
+    color: red;
+}
+.clickable{
+    cursor: pointer;
+}
+.stylform{
+    color: whitesmoke;
+    font-size: 15px;
+    font-weight: bold;
+}

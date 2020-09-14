@@ -1,0 +1,156 @@
+<div class="row">
+	<div class="form-group col-md-5">
+	    <form #f1="ngForm" (ngSubmit)="chercherParMatricule(f1.value.matricule)">
+			<div class="form-group">
+				<label >saisir le n° matricle : </label>
+				<input type="text" ngModel name="matricule" required>
+				<button [disabled]="!f1.valid" type="submit" class="btn btn-warning">Chercher</button>
+			</div>	
+		</form>	
+	</div>
+</div>
+<div>
+</div>
+
+<div class="panel panel-primary" *ngIf="mode==1">
+	<div class="panel-heading titre_centrer">{{title}}</div>
+	 <div class="panel-body jumbotron">
+	   <div >
+		  <table class="table table-hover">
+			 <thead>
+				<tr class="info">
+					<th>Photo</th>
+				    <th class="centrer_gras">N° matricule</th>
+				    <th class="centrer_gras">grade</th>
+					<th class="centrer_gras">Nom et prénom</th>
+					<th class="centrer_gras">fonction</th>
+                    <th class="centrer_gras">Statut</th>
+                    <th *ngIf="authService.isSecretaire()"></th>
+					<th *ngIf="authService.isSecretaire()"></th>
+					<th *ngIf="authService.isSecretaire()"></th>
+                    <th></th>
+				</tr>
+			  </thead>
+			  <tbody *ngFor="let p of personnels?.personnel;let ind=index" >
+				<tr  [ngClass]="{'info':(ind%2)==1}">
+					<td>
+                        <img width="150" width="100" class="img-thumbnail img-circle" 
+                        src="{{personnelService.host+'/imagePersonnel/'+p.matricule}}"/>
+                    </td>
+					<td >
+                        <p></p>
+                        <div class="gras">
+                            <button class="btn btn-primary">{{p.matricule}}</button>
+                        </div>
+                    </td>
+					<td>
+                        <p></p>
+                        <div class="td_perso">{{p.grade}}</div>
+                    </td>
+				    <td >
+                        <p></p>
+                        <div class="td_perso">{{p.nomPrenom}}</div>
+                    </td>
+					<td>
+                        <p></p>
+                        <div class="td_perso">{{p.fonction}}</div>
+                    </td>
+					<td >
+                        <p></p>
+                        <div class="td_perso">{{p.statut}}</div>
+                    </td>
+					<td *ngIf="p.statut!='EN SERVICE' && authService.isSecretaire()">
+						<button class="btn-success" (click)="onOperationnel(p)">Rendre operationnel</button>
+					</td>
+				    <td *ngIf="p.statut!='EN CONGE' && authService.isSecretaire()">
+						<button class="btn-warning" (click)="onConge(p)">Mettre en congé</button>
+					</td> 
+					<td *ngIf="p.statut!='MALADE' && authService.isSecretaire()">
+						<button class="btn-danger" (click)="onMalade(p)">Rendre malade</button>
+					</td>
+					<td *ngIf="p.statut!='PERMISSIONNAIRE' && authService.isSecretaire()">
+						<button class="btn-info" (click)="onPermissionnaire(p)" > mettre en permission</button>
+					</td> 
+					<td>
+						<button (click)="onGetDetailPersonnel(p)" class="btn btn-primary">détails
+						</button>
+					</td>
+				</tr>
+			  </tbody>
+		  </table>
+		  <div class="container " >
+			<ul class="nav nav-pills">
+				<li [ngClass]="{'active':i==currentPage}" *ngFor="let p of pages; let i=index"><a class="clickable" (click)="gotoPage(i)">{{i+1}}</a>
+				</li>
+			</ul>
+		  </div> 
+	   </div>
+	 </div>
+</div>
+<div class="panel panel-primary" *ngIf="mode==2">
+	<div class="panel-heading titre_centrer">{{title}}</div>
+	 <div class="panel-body jumbotron">
+	   <div >
+		  <table class="table table-hover">
+			 <thead>
+				<tr class="info">
+					<th>Photo</th>
+				    <th class="centrer_gras">N° matricule</th>
+				    <th class="centrer_gras">grade</th>
+					<th class="centrer_gras">Nom et prénom</th>
+					<th class="centrer_gras">fonction</th>
+                    <th class="centrer_gras">Statut</th>
+                    <th *ngIf="authService.isSecretaire()"></th>
+					<th *ngIf="authService.isSecretaire()"></th>
+                    <th *ngIf="authService.isSecretaire()"></th>
+                    <th></th>
+				</tr>
+			  </thead>
+			  <tbody >
+				<tr >
+					<td>
+                        <img width="150" width="100" class="img-thumbnail img-circle" 
+                        src="{{personnelService.host+'/imagePersonnel/'+currentPersonnel.matricule}}"/>
+                    </td>
+					<td >
+                        <p></p>
+                        <div class="td_perso">{{currentPersonnel.matricule}}</div>
+                    </td>
+					<td>
+                        <p></p>
+                        <div class="td_perso">{{currentPersonnel.grade}}</div>
+                    </td>
+				    <td >
+                        <p></p>
+                        <div class="td_perso">{{currentPersonnel.nomPrenom}}</div>
+                    </td>
+					<td>
+                        <p></p>
+                        <div class="td_perso">{{currentPersonnel.fonction}}</div>
+                    </td>
+					<td >
+                        <p></p>
+                        <div class="td_perso">{{currentPersonnel.statut}}</div>
+                    </td>
+                    <td *ngIf="currentPersonnel.statut!='EN SERVICE' && authService.isSecretaire()">
+						<button class="btn-success" (click)="onOperationnel(p)">Rendre operationnel</button>
+					</td>
+				    <td *ngIf="currentPersonnel.statut!='EN CONGE' && authService.isSecretaire()">
+						<button class="btn-warning" (click)="onConge(p)">Mettre en congé</button>
+					</td> 
+					<td *ngIf="currentPersonnel.statut!='MALADE' && authService.isSecretaire()">
+						<button class="btn-danger" (click)="onMalade(p)">Rendre malade</button>
+					</td>
+					<td *ngIf="currentPersonnel.statut!='PERMISSIONNAIRE' && authService.isSecretaire()">
+						<button class="btn-info" (click)="onPermissionnaire(p)" > mettre en permission</button>
+					</td> 
+					<td>
+						<button (click)="onGetDetailPersonnel(currentPersonnel)" class="btn btn-primary">détails
+						</button>
+					</td>
+				</tr>
+			  </tbody>
+		  </table>
+	   </div>
+	 </div>
+</div>

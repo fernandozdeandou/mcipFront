@@ -1,0 +1,112 @@
+<div class="container">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading"> Formulaire d'enrégistrement</div>
+            <div class="panel-body jumbotron">
+            <div  class="col-md-offset-2">
+                <span >
+                    <img src="assets/image_mcip/photoFace.jpg" class="profile-img-card" height="200" width="350">
+                </span>
+                <p> </p>
+                <p> </p> 
+            </div>
+
+        
+      <form
+        *ngIf="!isSuccessful"
+        name="form"
+        (ngSubmit)="f.form.valid && onSubmit()"
+        #f="ngForm"
+        novalidate
+      >
+        <div class="form-group">
+          <label for="username">Matricule</label>
+          <input
+            type="text"
+            class="form-control"
+            name="username"
+            [(ngModel)]="form.username"
+            required
+            minlength="5"
+            maxlength="10"
+            #username="ngModel"
+          />
+          <div class="alert-danger" *ngIf="f.submitted && username.invalid">
+            <div *ngIf="username.errors.required">Le matriculeest requis!</div>
+            <div *ngIf="username.errors.minlength">
+              le matricule doit avoir au moins 5 caractères!
+            </div>
+            <div *ngIf="username.errors.maxlength">
+                le matricule doit avoir au plus 10 caractères!
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            name="email"
+            [(ngModel)]="form.email"
+            required
+            email
+            #email="ngModel"
+          />
+          <div class="alert-danger" *ngIf="f.submitted && email.invalid">
+            <div *ngIf="email.errors.required">l'adresse email est requise ! </div>
+            <div *ngIf="email.errors.email">
+              L'adresse email doit être valide !
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Mot de pass</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            [(ngModel)]="form.password"
+            required
+            minlength="4"
+            #password="ngModel"
+          />
+          <div class="alert-danger" *ngIf="f.submitted && password.invalid">
+            <div *ngIf="password.errors.required">Le mot de pass est requis !</div>
+            <div *ngIf="password.errors.minlength">
+              Le mot de pass doit avoir au moins 4 caractères !
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="repassword">confirmation du mot de pass</label>
+          <input
+            type="password"
+            class="form-control"
+            name="repassword"
+            [(ngModel)]="form.repassword"
+            #password="ngModel"
+          />
+        </div>
+
+
+        <div class="form-group">
+          <button class="btn btn-primary ">Enrégistrer</button>
+        </div>
+  
+        <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
+          Echec de l'enrégistrement !<br />{{ errorMessage }}
+        </div>
+      </form>
+  
+      <div class="alert alert-success" *ngIf="isSuccessful">
+        Enrégistrement réussit !
+      </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,96 @@
+<div class="row">
+	<div class="form-group col-md-5">
+	    <form #f1="ngForm" (ngSubmit)="getUser(f1.value.username)">
+			<div class="form-group">
+				<label >N° matricule : </label>
+				<input type="text" ngModel name="username" required>
+				<button [disabled]="!f1.valid" type="submit" class="btn btn-warning">Chercher</button>
+			</div>	
+		</form>	
+	</div>
+</div> 
+
+<div *ngIf="mode==1">
+	<div class="panel panel-primary" >
+    	<div class="panel-heading titre_centrer">liste des utilisateurs</div>
+		<div class="panel-body">
+			<table class="table table-hover table_size" >
+		  	  <thead>
+				 <tr class="info">
+			 	   <th><p class="gras">N° matricule</p></th>
+			       <th><p class="gras">Email</p></th>
+				   <th><p class="gras">roles</p></th>
+				   <th><p class="gras"></p></th>
+				   <th><p class="gras"></p></th>
+				   <th><p class="gras"></p></th>
+			     </tr>
+		     </thead>
+		     <tbody *ngFor="let u of users ; let ind=index">
+			  <tr [ngClass]="{'info':(ind%2)==1}" *ngFor="let r of u.roles">
+				<td ><button class="btn btn-primary" (click)="getUser(u.username)">{{u.username}}</button></td>
+				<td>{{u.email}}</td>
+				<td > 
+					{{r.name}}	
+				</td>
+				<td *ngIf="r.name!='ROLE_ADMIN'">
+					<button class="btn btn-info" (click)="onsetAdminRole(u.username)">setAdminRole</button>
+				</td>
+				<td *ngIf="r.name!='ROLE_CHEF'">
+					<button class="btn btn-danger" (click)="onsetChefRole(u.username)">setChefRole</button>
+				</td>
+				<td *ngIf="r.name!='ROLE_USER'">
+					<button class="btn btn-success" (click)="onsetUserRole(u.username)">setUserRole</button>
+				</td>
+				<td *ngIf="r.name!='ROLE_SMCIP'">
+					<button class="btn btn-warning" (click)="setSecretaireRole(u.username)">setSecretaireRole</button>
+				</td>
+			  </tr>
+		   </tbody>
+		 </table>	
+    </div>
+  </div>
+</div>
+<div *ngIf="mode==2">
+	<div class="panel panel-primary" *ngIf="user" >
+    <div class="panel-heading titre_centrer"> Utilisateur recherché</div>
+	<div class="panel-body">
+		<table class="table table-hover table_size" >
+			<thead>
+				<tr class="info">
+			 	   <th><p class="gras">N° matricule</p></th>
+			       <th><p class="gras">Email</p></th>
+				   <th><p class="gras">roles</p></th>
+				   <th><p class="gras"></p></th>
+				   <th><p class="gras"></p></th>
+				   <th><p class="gras"></p></th>
+			     </tr>
+			</thead>
+			<tbody>
+				<tr [ngClass]="{'active':(ind%2)==1}" *ngFor="let r of user.roles">
+					<td >{{user.username}}</td>
+					<td>{{user.email}}</td>
+					<td > 
+						{{user.name}}	
+					</td>
+					<td *ngIf="r.name!='ROLE_ADMIN'">
+						<button class="btn btn-info" (click)="onsetAdminRole(user.username)">setAdminRole</button>
+					</td>
+					<td *ngIf="r.name!='ROLE_CHEF'">
+						<button class="btn btn-danger" (click)="onsetChefRole(user.username)">setChefRole</button>
+					</td>
+					<td *ngIf="r.name!='ROLE_USER'">
+						<button class="btn btn-success" (click)="onsetUserRole(user.username)">setUserRole</button>
+					</td>
+					<td *ngIf="r.name!='ROLE_SMCIP'">
+						<button class="btn btn-warning" (click)="setSecretaireRole(user.username)">setSecretaireRole</button>
+					</td>
+				</tr>
+			</tbody>
+			<div *ngIf="mode!=1">
+				<button class="btn-primary" (click)="onRetour()">retour à la liste des utilisateurs</button>	
+			</div>
+		</table>	
+	</div>
+</div>
+	
+</div>

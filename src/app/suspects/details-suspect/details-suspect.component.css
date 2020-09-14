@@ -1,0 +1,20 @@
+.titre_centrer{
+    font-size: 20px;
+    text-align: center;
+}
+.centrer_gras{
+    text-align: center;
+    font-weight: bold;
+    font-size: 17px;
+}
+.centrer_data{
+    text-align: center;
+    font-size: 17px;
+}
+.em{
+    font-size: 17px;
+    text-decoration: underline;
+}
+.strong{
+    font-size: 17px;
+}

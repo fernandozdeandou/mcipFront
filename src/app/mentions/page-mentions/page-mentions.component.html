@@ -1,0 +1,138 @@
+<div *ngIf="isLoggedIn">
+    <div class="row">
+        <div class="form-group col-md-1"></div>
+        <div class="form-group col-md-5">
+            <form #f1="ngForm" (ngSubmit)="chercherNumero(f1.value.numeroMent)">
+                <div class="form-group">
+                    <label class="stylform">Numero de la mention : </label>
+                    <input type="number" ngModel name="numeroMent" required>
+                    <button [disabled]="!f1.valid" type="submit" class="btn btn-warning">Chercher</button>
+                </div>	
+            </form>	
+        </div>
+        <div class="form-group col-md-4">
+            <form #f="ngForm" (ngSubmit)="chercherDate(f.value.dateMention)">
+                <div class="form-group">
+                    <label class="stylform">Date mention : </label>
+                    <input type="date" ngModel name="dateMention" required>
+                    <button [disabled]="!f.valid" type="submit" class="btn btn-warning">Chercher</button>
+                </div>	
+            </form>
+        </div>
+        <div class="col-md-2" *ngIf="mode!=1">
+            <button class="btn-success" (click)="onRetour()">retour aux mentions</button>	
+        </div>
+    </div>
+    
+    <div class="panel panel-primary" >
+        <div class="panel-heading titre_centrer">{{title}}</div>
+        <div class="panel-body jumbotron">
+            <div *ngIf="mode==1">
+              <table class="table  table-hover" >
+                <thead>
+                    <tr class="info">
+                        <th><p class="gras">N°</p></th>
+                        <th><p class="gras">Dates</p></th>
+                        <th><p class="gras">Heures</p></th>
+                        <th><p class="centrer_gras"> Titres et commentaires</p></th>
+                        <th><p class="gras">Observation </p></th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let m of pageMentions?.mention;let ind=index">
+                    <tr [ngClass]="{'info':(ind%2)==1}" >
+                        <td><div><p></p><p class="gras"><button class="btn btn-primary" (click)="chercherNumero(m.numeroMention)">{{m.numeroMention}}</button></p></div></td>
+                         <td><div><p></p><p >{{m.dateMention | date:'EEEE,d MMMM y'}}</p></div></td>
+                        <td><div><p></p><p >{{m.heureMention}}</p></div></td>
+                        <td><p class="centrer_souligne gras">{{m.titre}} :</p><br> <p>{{m.commentaire}}</p></td>
+                        <td >
+                             <div *ngIf="m.observation==null">
+                            <p> <button class="btn-warning" (click)="onObservation(m.numeroMention)">faire observation</button></p>
+                             </div>
+                             <div *ngIf="m.observation!=null" >
+                                 <p></p>
+                            <p class="rouge_gras">  {{m.observation.message}}</p>
+                             </div>
+                        </td> 
+                    </tr>
+                </tbody>
+              </table>	
+              <div class="container info" >
+                <ul class="nav nav-pills">
+                    <li [ngClass]="{'active':i==currentPage}" *ngFor="let p of pages; let i=index"><a class="clickable" (click)="gotoPage(i)">{{i+1}}</a>
+                    </li>
+                </ul>
+              </div> 
+            </div>
+    
+            <div *ngIf="mode==2">
+                <table class="table" >
+                  <thead>
+                    <tr class="info">
+                        <th><p class="gras">N°</p></th>
+                        <th><p class="gras">Date</p></th>
+                        <th><p class="gras">Heure</p></th>
+                        <th><p class="centrer_gras"> Titre et commentaire</p></th>
+                        <th><p class="gras">Observation </p></th>
+                    </tr>
+                  </thead>
+                  <tbody *ngIf="currentMention">
+                    <tr >
+                        <td><div><p></p><p class="gras">{{currentMention.numeroMention}}</p></div></td>
+                         <td><div><p></p><p >{{currentMention.dateMention | date:'EEEE,d MMMM y'}}</p></div></td>
+                        <td><div><p></p><p >{{currentMention.heureMention}}</p></div></td>
+                        <td><p class="centrer_souligne gras">{{currentMention.titre}} :</p><br> <p>{{currentMention.commentaire}}</p></td>
+                        <td >
+                             <div *ngIf="currentMention.observation==null">
+                            <p> <button class="btn-warning" (click)="onObservation(currentMention.numeroMention)">faire observation</button></p>
+                             </div>
+                             <div *ngIf="currentMention.observation!=null" >
+                                 <p></p>
+                            <p class="rouge_gras">  {{currentMention.observation.message}}</p>
+                             </div>
+                        </td>  	
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="col-md-2" *ngIf="mode!=1">
+                    <button class="btn-success" (click)="onRetour()">retour aux mentions</button>	
+                </div>	
+            </div>
+            <div *ngIf="mode==3">
+                <table class="table" >
+                  <thead>
+                    <tr class="info">
+                        <th><p class="gras">N°</p></th>
+                        <th><p class="gras">Dates</p></th>
+                        <th><p class="gras">Heures</p></th>
+                        <th><p class="centrer_gras"> Titres et commentaires</p></th>
+                        <th><p class="gras">Observation </p></th>
+                    </tr>
+                  </thead>
+                  <tbody  *ngFor="let m of listeMention; let pid=index">  
+                    <tr [ngClass]="{'info':(pid%2)==1}" *ngIf="listeMention">
+                        
+                        <td><div><p></p><p class="gras"><button class="btn btn-primary" (click)="chercherNumero(m.numeroMention)">{{m.numeroMention}}</button></p></div></td>
+                         <td><div><p></p><p >{{m.dateMention | date:'EEEE,d MMMM y'}}</p></div></td>
+                        <td><div><p></p><p >{{m.heureMention}}</p></div></td>
+                        <td><p class="centrer_souligne gras">{{m.titre}} :</p><br> <p>{{m.commentaire}}</p></td>
+                        <td >
+                             <div *ngIf="m.observation==null">
+                            <p> <button class="btn-warning" (click)="onObservation(m.numeroMention)">faire observation</button></p>
+                             </div>
+                             <div *ngIf="m.observation!=null" >
+                                 <p></p>
+                            <p class="rouge_gras">  {{m.observation.message}}</p>
+                             </div>
+                        </td> 
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="col-md-2" *ngIf="mode!=1">
+                    <button class=" btn btn-success" (click)="onRetour()">retour aux mentions</button>	
+                </div>	
+            </div>
+        </div>
+    </div>
+    
+    </div>
+                    

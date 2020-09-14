@@ -1,0 +1,89 @@
+
+<div class="panel panel-primary">
+	<div class="panel-heading titre_centrer" *ngIf="personnel" >Informations générales concernant {{personnel.nomPrenom}}</div>
+	<div class="panel-body jumbotron">
+		<div *ngIf="personnel">
+			<div class="row">
+				<div class="col-md-4">
+					<img width="300"  [src]="personnelService.host+'/imagePersonnel/'+personnel.matricule+'?ts='+getTS()"/>
+					<div *ngIf="authService.isSecretaire()">
+                        <div>
+                            <button (click)="onEditPhoto()">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </button>
+                        </div>
+                        <div *ngIf="editPhoto==true">
+                            <input type="file" (change)="onSelectedFile($event)"/>
+                            <button class="btn btn-success" (click)="uploadPhotoPersonnel()">
+                                UploadPhoto
+                            </button>
+                                 {{progress}}
+                        </div>	
+			        </div>
+				</div>
+				<div class="col-md-4">
+					<ul class="list-group">
+						<li class="list-group-item"> 
+                            <em class="em">Nom et prénom :</em> 
+                            <strong class="strong">{{personnel.nomPrenom}}</strong>
+                        </li>
+						<li class="list-group-item"> 
+                            <em class="em">Matricule solde :</em> 
+                            <strong class="strong">{{personnel.matricule}}</strong>
+                        </li>
+						<li class="list-group-item">
+                            <em class="em">Grade :</em>  
+                            <strong class="strong">{{personnel.grade}}</strong>
+                        </li>
+						<li class="list-group-item">
+                             <em class="em">Fonctions occupée :</em> 
+                             <strong class="strong">{{personnel.fonction}}</strong>
+                        </li>
+						<li class="list-group-item"> 
+                            <em class="em">Date de prise de service :</em> 
+                            <strong class="strong">{{personnel.datePriseService | date:'EEEE,d MMMM y'}}</strong>
+                        </li>
+						<li class="list-group-item">
+                            <em class="em">Statut:</em> 
+                            <strong class="strong">{{personnel.statut}}</strong>
+                        </li>
+					</ul>	
+				</div>
+				<div class="col-md-4"> 
+					<ul class="list-group">
+						<li class="list-group-item">
+                            <em class="em">Date de naissace :</em> 
+                            <strong class="strong">{{personnel.dateNaissance | date:'EEEE,d MMMM y'}}</strong> 
+                        </li>
+						<li class="list-group-item">
+                            <em class="em">Sexe :</em>
+                            <strong class="strong">{{personnel.sexe}}</strong>  
+                        </li>
+						<li class="list-group-item">
+                            <em class="em">Numero de la CNI :</em>  
+                            <strong class="strong">{{personnel.numero_cni}}</strong>
+                        </li>
+                        <li class="list-group-item">
+                            <em class="em">Adresse email:</em>  
+                            <strong class="strong">{{personnel.email}}</strong>
+                        </li>
+						<li class="list-group-item">
+                            <em class="em">contats téléphoniques :</em>  
+                            <strong class="strong">{{personnel.numeroTelephone}}</strong>
+                        </li>
+						<li class="list-group-item">
+                            <em class="em">Lieu de résidense :</em>  
+                            <strong class="strong">{{personnel.lieuDomicile}}</strong>
+                        </li>
+					</ul>
+				</div>
+			</div>
+        </div>
+        <div>
+            <button (click)="retourListPersonnel()" class="btn btn-warning">
+                retour à la liste du personnel </button>
+        </div>	
+	</div>	
+</div>
+
+				

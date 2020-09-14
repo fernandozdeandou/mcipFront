@@ -1,0 +1,19 @@
+.titre_centrer{
+    font-size: 20px;
+    text-align: center;
+}
+.centrer_gras{
+    text-align: center;
+    font-weight: bold;
+    font-size: 17px;
+}
+.gras{
+    font-weight: bold;  
+}
+.td_perso{
+    font-size: 17px;
+   
+}
+.curseur{
+    cursor: pointer;
+}

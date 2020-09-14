@@ -1,0 +1,78 @@
+<div class="container spacer">
+	<div class="panel panel-primary" *ngIf="mode==1">
+		<div class="panel-heading">Nouvelle mention</div>
+		<div class="panel-body">
+			<form  #f="ngForm"
+			 (ngSubmit)="f.valid && onConfirmer(f.value)"
+			 novalidate >
+				<div class="form-group">
+					<label class="control-label">Titre: </label>
+					<input 
+					class="form-control" 
+					type="text" 
+					ngModel  
+					name="titre" 
+					required
+					minlength="4"
+			        #titre="ngModel"
+					/>
+					<div class="alert alert-danger"
+					      role="alert"
+					      *ngIf="f.submitted && titre.invalid" >
+						<div *ngIf="titre.errors.required">
+							Le titre est obligatoir !
+						</div>
+						<div *ngIf="titre.errors.minlength">
+							le titre doit avoir au moins 4 carractères!
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">Commentaire: </label>
+					<input 
+					class="form-control" 
+					type="text-area" 
+					ngModel 
+					name="commentaire" 
+					required
+					minlength="5"
+			        #commentaire="ngModel"
+					/>
+					<div class="alert alert-danger"
+					      role="alert"
+					      *ngIf="f.submitted && commentaire.invalid" >
+						<div *ngIf="commentaire.errors.required">
+							Le commentaire est obligatoir !
+						</div>
+						<div *ngIf="commentaire.errors.minlength">
+							le commentaire doit avoir au moins 5 carractères!
+						</div>
+					</div>
+				</div>
+				<button type="submit" class="btn btn-primary">Confirmer</button>	
+	       </form>
+		</div>
+		</div>
+	</div>
+	<div class="panel panel-primary" *ngIf="mode==2">
+		<div class="panel-heading">Confirmation</div>
+		<div class="panel-body">
+			<div>
+				<label class="control-label">Titre :</label>
+				<label class="form-control">{{mention.titre}}</label>
+			</div>
+			<div>
+				<label class="control-label" >Commentaire :</label>
+				<label class="form-control textArea" type="text-area">{{mention.commentaire}}</label>
+			</div>
+			<div class="row">
+				<div class="col-md-2"></div>
+				<div class="col-md-4"><button class="btn btn-success" (click)="onSaveMention()">Enregistrer</button>
+				</div>
+				<div class="col-md-4">
+					<button class="btn btn-danger" (click)="mode=1">annuler
+					</button>
+				</div>		
+			</div>
+		</div>
+	</div>

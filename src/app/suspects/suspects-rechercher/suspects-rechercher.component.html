@@ -1,0 +1,220 @@
+
+<div class="row">
+	<div class="form-group col-md-6">
+	    <form #f1="ngForm" (ngSubmit)="chercherNumeroCni(f1.value.cni)">
+			<div class="form-group">
+				<label >saisir le n° de la cni : </label>
+				<input type="text" ngModel name="cni" required>
+				<button [disabled]="!f1.valid" type="submit" class="btn btn-warning">Chercher</button>
+			</div>	
+		</form>	
+	</div>
+	<div class="form-group col-md-6">
+		<form #f="ngForm" (ngSubmit)="chercherMotCle(f.value.motCle)">
+			<div class="form-group">
+				<label >saisir le nom du suspect : </label>
+				<input type="text" ngModel name="motCle" required>
+				<button [disabled]="!f.valid" type="submit" class="btn btn-warning">Chercher</button>
+			</div>	
+	    </form>
+	</div>
+</div>
+
+<div class="panel panel-primary" *ngIf="suspects">
+	<div class="panel-heading titre_centrer">
+		{{title}}
+	</div>
+	<div class="panel-body jumbotron">
+		<div *ngIf="inRecherche==true && mode==1">
+			<button class="btn btn-warning"(click)="onRetourSuspects()" >
+				retour à la liste des gardés à vue
+			</button>
+		</div>
+	   <div *ngIf="suspects && mode==1">
+		  <table class="table table-hover">
+			 <thead>
+				<tr class="info">
+				    <th class="centrer_gras">N°</th>
+				    <th class="centrer_gras">Photo</th>
+					<th class="centrer_gras">Nom et prénom</th>
+					<th class="centrer_gras">N° CNI</th>
+					<th class="centrer_gras">Date naissance</th>
+					<th class="centrer_gras">position</th>
+				    <th *ngIf="authService.isSecretaire()"></th>
+					<th *ngIf="authService.isSecretaire()"></th>
+					<th *ngIf="authService.isSecretaire()"></th>
+					<th></th>
+				</tr>
+			  </thead>
+			  <tbody *ngFor="let s of suspects; let ind=index" >
+				<tr [ngClass]="{'info':(ind%2)==1}">
+					<td>
+						<p></p>
+						<div class="gras">
+							<button class="btn btn-primary" (click)="onGetDetailSuspect(s)">
+								{{s.idSuspect}}
+							</button>
+						</div>	
+					</td>
+					<td> 
+						<span>
+                            <img width="150" width="100" class="img-thumbnail img-circle" 
+						     src="{{suspectService.host+'/photoFaceSusp/'+s.idSuspect}}"/>
+						</span>
+					</td>
+				    <td>
+						<p></p>
+						<div class="td_perso">{{s.nomPrenom}}</div>	
+					</td>
+				    <td>
+						<p></p>
+						<div class="td_perso">{{s.numeroCni}}</div>
+					</td>
+					<td>
+						<p></p>
+						<div class="td_perso">{{s.dateNaissance | date:'d MMMM y'}}</div>
+					</td>
+					<td> 
+						<p></p>
+						 <div>									
+					        <span *ngIf="s.position=='GARDER A VUE'">
+						      <img src="assets/image_mcip/suspectGarderAvue.jpg" class="img-thumbnail img-circle" height="80" width="80">
+					        </span>
+					        <span *ngIf="s.position=='LIBRE'">
+						      <img src="assets/image_mcip/suspectLiberer.jpg" class="img-thumbnail img-circle" height="80" width="80">
+					        </span>
+					        <span *ngIf="s.position=='EN FUITE'">
+						      <img src="assets/image_mcip/suspectRecherche.jpg" class="img-thumbnail img-circle" height="80" width="80" >
+					        </span>
+					        <span *ngIf="s.position=='DEFERER'">
+						      <img src="assets/image_mcip/suspectDefere.jpg" class="img-thumbnail img-circle" height="80" width="80" >
+					        </span>
+				        </div>
+					</td>
+					<td *ngIf="s.position!='GARDER A VUE' && authService.isSecretaire()">
+						<p></p>
+						<button (click)="onEcrouerSuspect(s)" class="btn btn-info">écrouer
+						</button>
+					</td>
+					<td *ngIf="s.position!='DEFERER' && authService.isSecretaire()">
+						<p></p>
+						<button (click)="onDefererSuspect(s)" class="btn btn-warning">déférer
+						</button>
+					</td>
+					<td *ngIf="s.position!='LIBRE' && authService.isSecretaire()">
+						<p></p>
+						<button (click)="onRelaxerSuspect(s)" class="btn btn-success">Relaxer
+						</button>
+					</td>
+					<td *ngIf="s.position!='EN FUITE' && authService.isSecretaire()">
+						<p></p>
+						<button (click)="onRechercherSuspect(s)" class="btn btn-danger">Rechercher
+						</button>
+					</td>
+					<td>
+						<p></p>
+						<button (click)="onGetDetailSuspect(s)" class="btn btn-primary">détails
+						</button>
+					</td>
+				</tr>
+			  </tbody>
+		  </table>
+	   </div>
+
+	   <div *ngIf="suspect && mode==2">
+		<table class="table table-hover">
+		   <thead>
+			  <tr class="info">
+				  <th class="centrer_gras">N°</th>
+				  <th class="centrer_gras">Photo</th>
+				  <th class="centrer_gras">Nom et prénom</th>
+				  <th class="centrer_gras">Numéro CNI</th>
+				  <th class="centrer_gras">Date naissance</th>
+				  <th class="centrer_gras">position</th>
+				  <th *ngIf="authService.isSecretaire()"></th>
+				  <th *ngIf="authService.isSecretaire()"></th>
+				  <th *ngIf="authService.isSecretaire()"></th>
+				  <th></th>
+			  </tr>
+			</thead>
+			<tbody >
+			  <tr class="info">
+				  <td>
+					  <p></p>
+					  <div class="gras">
+						  <button class="btn btn-primary" (click)="onGetDetailSuspect(suspect)">
+							  {{suspect.idSuspect}}
+						  </button>
+					  </div>	
+				  </td>
+				  <td>
+					  <img width="100" width="100" class="img-thumbnail img-circle" src="{{suspectService.host+'/photoFaceSusp/'+suspect.idSuspect}}"/>
+				  </td>
+				  <td>
+					  <p></p>
+					  <div class="td_perso">{{suspect.nomPrenom}}</div>	
+				  </td>
+				  <td>
+					  <p></p>
+					  <div class="td_perso">{{suspect.numeroCni}}</div>
+				  </td>
+				  <td>
+					<p></p>
+					<div class="td_perso">{{suspect.dateNaissance | date:'d MMMM y'}}</div>
+				</td>
+				  <td> 
+					  <p></p>
+					   <div>									
+						  <span *ngIf="suspect.position=='GARDER A VUE'">
+							<img src="assets/image_mcip/suspectGarderAvue.jpg" class="img-thumbnail img-circle" height="80" width="80">
+						  </span>
+						  <span *ngIf="suspect.position=='LIBRE'">
+							<img src="assets/image_mcip/suspectLiberer.jpg" class="img-thumbnail img-circle" height="80" width="80">
+						  </span>
+						  <span *ngIf="suspect.position=='EN FUITE'">
+							<img src="assets/image_mcip/suspectRecherche.jpg" class="img-thumbnail img-circle" height="80" width="80" >
+						  </span>
+						  <span *ngIf="suspect.position=='DEFERER'">
+							<img src="assets/image_mcip/suspectDefere.jpg" class="img-thumbnail img-circle" height="80" width="80" >
+						  </span>
+					  </div>
+				  </td>
+				  <td *ngIf="suspect.position!='GARDER A VUE' && authService.isSecretaire()">
+					  <p></p>
+					  <button (click)="onEcrouerSuspect(suspect)" class="btn btn-info">écrouer
+					  </button>
+				  </td>
+				  <td *ngIf="suspect.position!='DEFERER' && authService.isSecretaire()">
+					  <p></p>
+					  <button (click)="onDefererSuspect(suspect)" class="btn btn-warning">déférer
+					  </button>
+				  </td>
+				  <td *ngIf="suspect.position!='LIBRE' && authService.isSecretaire()">
+					  <p></p>
+					  <button (click)="onRelaxerSuspect(suspect)" class="btn btn-success">Relaxer
+					  </button>
+				  </td>
+				  <td *ngIf="suspect.position!='EN FUITE' && authService.isSecretaire()">
+					  <p></p>
+					  <button (click)="onRechercherSuspect(suspect)" class="btn btn-danger">Rechercher
+					  </button>
+				  </td>
+				  <td>
+					  <p></p>
+					  <button (click)="onGetDetailSuspect(suspect)" class="btn btn-primary">détails
+					  </button>
+				  </td>
+			  </tr>
+			</tbody>
+		</table>
+	 </div>
+	 <div>
+		<button class="btn btn-warning"(click)="onRetourListeSusp()" >
+			retour à la liste de tous les suspects
+		</button>
+	</div>
+	 </div>
+</div>
+
+
+<p>suspects-rechercher works!</p>
