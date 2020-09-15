@@ -7,5 +7,21 @@
     }
 .titre{
     text-align: center;
+    font-size: 50px;
     
+}
+.para{
+	color:white;
+	margin:10px;
+	text-align: center;
+	font-size: 30px;
+
+}
+.arrierePla{
+	background-image:url(../../assets/image_mcip/imAcMcip.png);
+	background-position:100% 50%;
+}
+.corps{
+	height: 450px;
+
 }
